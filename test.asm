@@ -25,7 +25,7 @@ _start:
 ;    mov rdx, max_ip_len 
 ;    int 80h 
 
-   mov rax, serv_ip
+   mov rax, [serv_ip]
    call f_atoi
 
    add rax, 6
