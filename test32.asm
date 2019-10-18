@@ -6,7 +6,7 @@
 ;;      TEST FILES FOR RUNNING SIMPLE FUNCTIONS
 
 SECTION .bss
-   serv_ip resb 5
+   servip resb 5
 
 SECTION .data
    ip_msg      db "Please enter the server's ip address: ", 0x0a, 0
@@ -20,7 +20,7 @@ _start:
     
 
 
-    mov rax, serv_ip
+    mov rax, servip
 
     call f_atoi
 
@@ -39,7 +39,7 @@ _get_server:
    ;Read and store the user input 
    mov eax, 3 
    mov ebx, 0     ; descriptor value for stdin
-   mov ecx, serv_ip 
+   mov ecx, servip 
    mov edx, max_ip_len     ;5 bytes (numeric, 1 for sign) of that information 
    int 80h
 
