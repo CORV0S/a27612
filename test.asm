@@ -29,7 +29,7 @@ _start:
    call f_atoi
 
    add rax, 6
-   call f_iprintLF
+   call f_iprint
    
 
     call f_quit
