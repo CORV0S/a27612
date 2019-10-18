@@ -25,7 +25,7 @@ _start:
 
     call f_atoi
 
-    call sprint
+    call f_sprint
 
     ;call f_iprint
 
