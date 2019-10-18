@@ -20,9 +20,11 @@ _start:
     
 
 
-    mov eax, servip
+    mov rax, servip
 
     call f_atoi
+
+    add eax, 3
 
     call f_iprintLF
 
