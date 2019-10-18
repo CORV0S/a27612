@@ -22,10 +22,12 @@ _start:
 
 
     mov rax, serv_ip
-    call f_atoi
 
-    add rax, 6
-    call f_iprint
+    call f_sprint
+    ;call f_atoi
+
+    ;add rax, 6
+    ;call f_iprint
 
     call f_quit
 
