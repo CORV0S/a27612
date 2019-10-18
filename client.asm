@@ -14,7 +14,11 @@ section .bss
    read_count resw 2
    serv_ip resb 5
    serv_port resb 5
-   
+   ipoctone resb 5
+   ipocttwo resb 5
+   ipoctthree resb 5
+   ipoctfour resb 5
+   power resb 5
 
 section .data
    sock_err_msg     db "Failed to initialize socket", 0x0a, 0
@@ -216,6 +220,8 @@ _iptoi:
    mov rax, serv_ip
    call slen
 ; ip address length is now rax
+   psh 999 ; to show no more items in stack
+   mov rsi, rax
    
 ; check each character, push each onto stack byte[ip_addr] = ip_addr[0] therefore byte[ip_addr + 1] = ip_addr[1]
 ; begin checking loop from end of address to the beginning
@@ -223,10 +229,10 @@ _iptoi:
 ; continue until all chars have been checked for string length
 nextaddresschar:
    mov rbx, 0
-   cmp byte [rbx], rax
+   cmp byte [rbx], rsi
    jg _ldotfound
    inc rbx
-   cmp byte [rax], '.'
+   cmp byte [rsi], '.'
    je _dotfound
    jne _pushnum
    jmp nextaddresschar
@@ -237,11 +243,31 @@ ret
 
 ; if '.' is found in address string, pop stack and convert to int
 _dotfound:
-  pop rcx
-  ; check if this is == 999
-  pop rdx ; multiply by 10
-  ; check if this is == 999
-  pop rsi ; multiply by 100
+  pop rax
+  ; atoi
+  mov rcx, rax
+  pop rax
+  cmp rax, 999
+  je endstack
+  ; atoi
+  mov rdx, 10
+  mul rdx
+  add rcx, rax
+  pop rax 
+  cmp rax, 999
+  je endstack
+  ; atoi
+  rdx, 100
+  mul rdx
+  add rcx, rax
+  ; store item in variable
+  mov ipoctone, rcx
+  
+
+endstack:
+  push 999
+  jmp nextaddresschar
+
 ; if '.' is not found in address push char onto stack
 _pushnum:
    mov rcx, byte [rax]
