@@ -18,7 +18,7 @@ f_atoi:
     cmp     r8, 57          ; compare rbx register's lower half value against ascii value 57 (char value 9)
     jg      .finished       ; jump if greater than to label finished
  
-    sub     bl, 48          ; convert rbx register's lower half to decimal representation of ascii value
+    sub     r8, 48          ; convert rbx register's lower half to decimal representation of ascii value
     add     rax, rbx        ; add rbx to our interger value in rax
     mov     rbx, 10         ; move decimal value 10 into rbx
     mul     rbx             ; multiply rax by rbx to get place value
