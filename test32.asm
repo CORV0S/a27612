@@ -35,28 +35,61 @@ _start:
 
     call f_atoi
 
-    mov ecx, 3
-    call _power
-    mul ebx
-
     call f_iprintLF
 
     call f_quit
 
-_power:
-   push eax
-   mov eax, 256
-   powloop:
-      cmp ecx, 0
-      je powfin
-      mov ebx, 256
-      mul ebx
-      dec ecx
-      jmp powloop
-   powfin:
-      mov ebx, eax
-      pop eax
-ret
+_itoh:
+   divideLoop:
+    inc     ecx             ; count each byte to print - number of characters
+    mov     edx, 0          ; empty edx
+    mov     esi, 16         ; mov 16 into esi
+    idiv    esi             ; divide eax by esi
+    cmp eax, 9              ; cmp to 9, if equal or less push
+    jg _pushL               ; else cmp to 10, 11, 12, 13, 14, 15 and psh corresponding letter
+    push eax
+    nextDigit:
+       mov eax, 16
+             ; edx holds the remainder after a divide instruction
+       mul edx             ; multiply remainder by 16 and push
+       push eax
+       cmp     eax, 0          ; can the integer be divided anymore?
+       jnz     divideLoop
+
+_pushL:
+   cmp eax, 10
+   je pA
+   cmp eax, 11
+   je pB
+   cmp eax, 12
+   je pC
+   cmp eax, 13
+   je pD
+   cmp eax, 14
+   je pE
+   cmp eax, 15
+   je pF
+   pushL_end:
+      jmp nextDigit
+   pA:
+      push 'A'
+      jmp pushL_end
+   pB:
+      push 'B'
+      jmp pushL_end
+   pC:
+      push 'C'
+      jmp pushL_end
+   pD:
+      push 'D'
+      jmp pushL_end
+   pE:
+      push 'E'
+      jmp pushL_end
+   pF:
+      push 'F'
+      jmp pushL_end
+   
 
 _get_server:
    ;Prompt User 
