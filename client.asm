@@ -1,4 +1,8 @@
-﻿%include        'functions.asm'
+﻿;; 255 max length for first ip octet
+;; 65280 max length for second ip octet
+;; 16711680 max length for third ip octet
+;; 4278190080 max length for last ip octet
+%include        'functions.asm'
 
 struc sockaddr_in
    .sin_family resw 1
@@ -42,11 +46,13 @@ section .data
       at sockaddr_in.sin_addr, dd 0
       at sockaddr_in.sin_zero, dd 0, 0
    iend
-   sockaddr_in_len    equ $ pop_sa
+   sockaddr_in_len    equ $ - pop_sa
 
 section .text
 
+
 ;; Client main entry point
+global _start
 _start:
    ;; Initialize the client and server socket values to 0, used for cleanup
    mov    word [sock], 0
@@ -55,7 +61,7 @@ _start:
    ;; Initialize socket
    call   _socket
 
-   .mainloop
+   .mainloop:
       ;; prompt for server address
       call _get_server
       ;; prompt for server port
@@ -82,33 +88,33 @@ _start:
 
 _get_server:
    ;Prompt User 
-   mov eax, 4 
-   mov ebx, 1     ; descriptor value for stdout
-   mov ecx, ip_msg 
-   mov edx, ip_msg_len 
+   mov rax, 4 
+   mov rbx, 1     ; descriptor value for stdout
+   mov rcx, ip_msg 
+   mov rdx, ip_msg_len 
    int 80h 
 
    ;Read and store the user input 
-   mov eax, 3 
-   mov ebx, 0     ; descriptor value for stdin
-   mov ecx, serv_ip 
-   mov edx, 5     ;5 bytes (numeric, 1 for sign) of that information 
+   mov rax, 3 
+   mov rbx, 0     ; descriptor value for stdin
+   mov rcx, serv_ip 
+   mov rdx, 5     ;5 bytes (numeric, 1 for sign) of that information 
    int 80h
 
    ret
 _get_port:
    ;Prompt User 
-   mov eax, 4 
-   mov ebx, 1     ; descriptor value for stdout
-   mov ecx, port_msg 
-   mov edx, port_msg_len 
+   mov rax, 4 
+   mov rbx, 1     ; descriptor value for stdout
+   mov rcx, port_msg 
+   mov rdx, port_msg_len 
    int 80h 
 
    ;Read and store the user input 
-   mov eax, 3 
-   mov ebx, 0     ; descriptor value for stdin
-   mov ecx, serv_port 
-   mov edx, 5     ;5 bytes (numeric, 1 for sign) of that information 
+   mov rax, 3 
+   mov rbx, 0     ; descriptor value for stdin
+   mov rcx, serv_port 
+   mov rdx, 5     ;5 bytes (numeric, 1 for sign) of that information 
    int 80h 
 
    ret
@@ -220,8 +226,8 @@ _iptoi:
    mov rax, serv_ip
    call slen
 ; ip address length is now rax
-   psh 999 ; to show no more items in stack
-   mov rsi, rax
+   push  999 ; to show no more items in stack
+   mov   rsi, rax
    
 ; check each character, push each onto stack byte[ip_addr] = ip_addr[0] therefore byte[ip_addr + 1] = ip_addr[1]
 ; begin checking loop from end of address to the beginning
@@ -257,7 +263,7 @@ _dotfound:
   cmp rax, 999
   je endstack
   ; atoi
-  rdx, 100
+  mov rdx, 100
   mul rdx
   add rcx, rax
   ; store item in variable
