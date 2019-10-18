@@ -6,7 +6,7 @@
 ;;      TEST FILES FOR RUNNING SIMPLE FUNCTIONS
 
 SECTION .bss
-   serv_ip resb 16
+   serv_ip resb 5
 
 SECTION .data
    ip_msg      db "Please enter the server's ip address: ", 0x0a, 0
