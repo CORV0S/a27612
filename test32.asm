@@ -20,7 +20,7 @@ _start:
     
 
 
-    mov rax, servip
+    mov eax, servip
 
     call f_atoi
 
