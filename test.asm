@@ -1,3 +1,4 @@
+%include 'functions.asm'
 ;; TCP echo server using x86_64 Linux syscalls
 ;; Assemble and link as follows:
 ;;        nasm -f elf64 -o test.o test.asm
@@ -49,9 +50,9 @@ _get_server:
 ;------------------------------------------
 ; void exit()
 ; Exit program and restore resources
-f_quit:
-    mov     rbx, 0
-    mov     rax, 1
-    int     80h
-    ret
+;f_quit:
+;    mov     rbx, 0
+;    mov     rax, 1
+;    int     80h
+;    ret
 
