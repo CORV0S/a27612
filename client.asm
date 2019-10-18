@@ -209,23 +209,24 @@ _exit:
 
 ;-----------------------------------------
 ; convert ip address to integer sum:
-; example = (input) 72.42.168.192 = (72 * 256^0) + (42 * 256^1) + (168 * 256^2) + (192 * 256^3)
+; example = (input) 192.168.42.72 = (72 * 256^0) + (42 * 256^1) + (168 * 256^2) + (192 * 256^3)
 ; = (output) 3232246344
 _iptoi:
 ; find length of string
-   mov eax, serv_ip
+   mov rax, serv_ip
    call slen
-; ip address length is now eax
+; ip address length is now rax
    
 ; check each character, push each onto stack byte[ip_addr] = ip_addr[0] therefore byte[ip_addr + 1] = ip_addr[1]
 ; begin checking loop from end of address to the beginning
 ; when check == "." pop stack into first octet var
 ; continue until all chars have been checked for string length
 nextaddresschar:
-   cmp byte [eax], 0
-   jl _ldotfound
-   dec eax
-   cmp byte [eax], '.'
+   mov rbx, 0
+   cmp byte [rbx], rax
+   jg _ldotfound
+   inc rbx
+   cmp byte [rax], '.'
    je _dotfound
    jne _pushnum
    jmp nextaddresschar
@@ -236,13 +237,15 @@ ret
 
 ; if '.' is found in address string, pop stack and convert to int
 _dotfound:
-  pop ecx
-  pop edx
-  pop esi
+  pop rcx
+  ; check if this is == 999
+  pop rdx ; multiply by 10
+  ; check if this is == 999
+  pop rsi ; multiply by 100
 ; if '.' is not found in address push char onto stack
 _pushnum:
-   mov ecx, byte [eax]
-   push ecx
+   mov rcx, byte [rax]
+   push rcx
    ret
 
 ; convert integer to hexadecimal
