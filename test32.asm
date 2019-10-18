@@ -46,14 +46,14 @@ _start:
 _power:
    push eax
    mov eax, 256
-   .powloop
+   powloop:
       cmp ecx, 0
       je powfin
       mov ebx, 256
       mul ebx
       dec ecx
       jmp powloop
-   .powfin
+   :powfin
       mov ebx, eax
       pop eax
 
