@@ -56,6 +56,7 @@ _power:
    powfin:
       mov ebx, eax
       pop eax
+ret
 
 _get_server:
    ;Prompt User 
