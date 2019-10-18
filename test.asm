@@ -25,7 +25,7 @@ _start:
 
     call f_atoi
 
-    call f_iprint
+    call f_iprintLF
 
     call f_quit
 

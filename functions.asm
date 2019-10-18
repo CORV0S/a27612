@@ -115,7 +115,7 @@ f_divideLoop:
  
 f_printLoop:
     dec     rcx             ; count down each byte that we put on the stack
-    mov     rax, rdx        ; mov the stack pointer into rax for printing
+    mov     rax, rsp        ; mov the stack pointer into rax for printing
     call    f_sprint          ; call our string print function
     pop     rax             ; remove last character from the stack to move rsp forward
     cmp     rcx, 0          ; have we printed all bytes we pushed onto the stack?
