@@ -18,15 +18,19 @@ SECTION .data
 global _start
 _start:
     call _get_server
-
-    push rax
     
-    mov rax, 4 
-    mov rbx, 1     ; descriptor value for stdout
-    mov rcx, serv_ip 
-    mov rdx, max_ip_len 
-    int 80h 
+;    mov rax, 4 
+;    mov rbx, 1     ; descriptor value for stdout
+;    mov rcx, serv_ip 
+;    mov rdx, max_ip_len 
+;    int 80h 
 
+   mov rax, serv_ip
+   call f_atoi
+
+   add rax, 6
+   call f_iprintLF
+   
 
     call f_quit
 
