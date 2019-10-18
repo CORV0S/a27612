@@ -25,14 +25,7 @@ _start:
     call f_atoi
 
     add rax, 6
-    call f_iprintLF
-    mov rcx, rax
-    
-    mov rax, 4 
-    mov rbx, 1     ; descriptor value for stdout
-
-    mov rdx, 16 
-    int 80h 
+    call f_iprint
 
     call f_quit
 
@@ -52,13 +45,4 @@ _get_server:
    int 80h
 
    ret
-
-;------------------------------------------
-; void exit()
-; Exit program and restore resources
-;f_quit:
-;    mov     rbx, 0
-;    mov     rax, 1
-;    int     80h
-;    ret
 
