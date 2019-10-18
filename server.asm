@@ -4,6 +4,7 @@
 ;;        ld server.o -o server
 ;;   
 ;;
+%include        'functions.asm'
 
 global _start
 
@@ -68,6 +69,7 @@ _start:
         ;; up the connection on their end.
         .readloop:
             call     _read
+            call     _print
             call     _echo
 
             ;; read_count is set to zero when client hangs up
@@ -167,6 +169,16 @@ _read:
     mov     [read_count], rax
 
     ret 
+
+;; Print data received from client
+_print:
+    mov       rax, 1             ; SYS_WRITE
+    mov       rdi, 1             ; STDOUT
+    mov       rsi, echobuf
+    mov       rdx, [read_count]
+    syscall
+
+    ret
 
 ;; Sends up to the value of read_count bytes from echobuf to the client socket
 ;; using sys_write 
