@@ -53,7 +53,7 @@ _power:
       mul ebx
       dec ecx
       jmp powloop
-   :powfin
+   powfin:
       mov ebx, eax
       pop eax
 
