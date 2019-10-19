@@ -76,7 +76,6 @@ _start:
     call _getmsgnum
     mov eax, msgnum
     call atoi
-    mov rax, eax
     push rax
     ;; Main loop handles connection requests (accept()) then echoes data back to client
     .mainloop:
