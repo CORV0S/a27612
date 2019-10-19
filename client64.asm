@@ -60,13 +60,13 @@ section .data
     getmsgnumstr_len      equ $ - getmsgnumstr
 
     ;; sockaddr_in structure for the address the listening socket binds to
-    pop_sa istruc sockaddr_in
-        at sockaddr_in.sin_family, dw 2           ; AF_INET
-        at sockaddr_in.sin_port, dw 0xce56        ; port 22222 in host byte order
-        at sockaddr_in.sin_addr, dd 0             ; localhost - INADDR_ANY
-        at sockaddr_in.sin_zero, dd 0, 0
-    iend
-    sockaddr_in_len     equ $ - pop_sa
+    ;pop_sa istruc sockaddr_in
+        ;at sockaddr_in.sin_family, dw 2           ; AF_INET
+        ;at sockaddr_in.sin_port, dw 0xce56        ; port 22222 in host byte order
+        ;at sockaddr_in.sin_addr, dd 0             ; localhost - INADDR_ANY
+        ;at sockaddr_in.sin_zero, dd 0, 0
+    ;iend
+    ;sockaddr_in_len     equ $ - pop_sa
 
 section .text
 
