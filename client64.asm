@@ -22,6 +22,7 @@ section .bss
     echobuf resb 256
     read_count resw 2
     msg resb 256
+    msgnum resb 5
 
 section .data
     sock_err_msg        db "Failed to initialize socket", 0x0a, 0
@@ -44,6 +45,9 @@ section .data
 
     getmsg          db "Enter your message: ", 0x0a, 0
     getmsg_len      equ $ - getmsg
+
+    getmsgnumstr          db "How many messages?: ", 0x0a, 0
+    getmsgnumstr_len      equ $ - getmsgnumstr
 
     ;; sockaddr_in structure for the address the listening socket binds to
     pop_sa istruc sockaddr_in
@@ -69,6 +73,9 @@ _start:
     ;; Bind and Listen
     call     _connect
     call     _got_here
+    call _getmsgnum
+    mov rcx, 0
+    push rcx
 
     ;; Main loop handles connection requests (accept()) then echoes data back to client
     .mainloop:
@@ -80,6 +87,11 @@ _start:
             call     _echo
             call     _read
             call     _print
+     pop rcx
+     inc rcx
+     push rcx
+     cmp msgnum, rcx
+     jle mainloop
             
 
             ;; read_count is set to zero when client hangs up
@@ -261,6 +273,29 @@ _get_msg:
     mov ebx, 0     ; descriptor value for stdin
     mov ecx, msg 
     mov edx, 256     ;5 bytes (numeric, 1 for sign) of that information 
+    int 80h
+
+    pop rdx                    ; store current rax
+    pop rsi                    ; store current rax
+    pop rdi                    ; store current rax
+    pop rax                    ; store current rax
+
+_get_msgnum:
+    push rax                    ; store current rax
+    push rdi                    ; store current rax
+    push rsi                    ; store current rax
+    push rdx                    ; store current rax
+    ;; Print connection message to stdout
+    mov       rax, 1             ; SYS_WRITE
+    mov       rdi, 1             ; STDOUT
+    mov       rsi, getmsgnumstr
+    mov       rdx, getmsgnumstr_len
+    syscall
+
+    mov eax, 3 
+    mov ebx, 0     ; descriptor value for stdin
+    mov ecx, msgnum 
+    mov edx, 5     ;5 bytes (numeric, 1 for sign) of that information 
     int 80h
 
     pop rdx                    ; store current rax
