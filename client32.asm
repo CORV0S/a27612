@@ -6,8 +6,8 @@
 ;;      TEST FILES FOR RUNNING SIMPLE FUNCTIONS
 
 SECTION .bss
-   servip1 resb 16
-   servport resb 16
+   servip1 resw 1
+   servport resw 1
 
 SECTION .data
    ip_msg1      db "Please enter the server's ip in hex: ", 0x0a, 0
@@ -25,7 +25,6 @@ _start:
 
     mov eax, servip1
 
-    call f_sprint
 
     call f_quit
 
