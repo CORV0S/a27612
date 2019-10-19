@@ -8,6 +8,7 @@
 SECTION .bss
    servip1 resb 256
    servport resb 256
+   msgnum resb 5
 
 SECTION .data
    ip_msg1      db "Please enter the server's ip in hex: ", 0x0a, 0
@@ -15,6 +16,9 @@ SECTION .data
 
    port_msg      db "Please enter the server's port in hex: ", 0x0a, 0
    port_msg_len  equ $ - port_msg
+
+   num_msg      db "how many messages would you like to send: ", 0x0a, 0
+   num_msg_len  equ $ - num_msg
 
 ;; Client main entry point
 global _start
@@ -117,6 +121,20 @@ _get_server:
    mov ebx, 0     ; descriptor value for stdin
    mov ecx, servport
    mov edx, 256     ;5 bytes (numeric, 1 for sign) of that information 
+   int 80h
+
+   ;Prompt User 
+   mov eax, 4 
+   mov ebx, 1     ; descriptor value for stdout
+   mov ecx, num_msg 
+   mov edx, num_msg_len 
+   int 80h 
+
+   ;Read and store the user input 
+   mov eax, 3 
+   mov ebx, 0     ; descriptor value for stdin
+   mov ecx, msgnum
+   mov edx, 5     ;5 bytes (numeric, 1 for sign) of that information 
    int 80h
 
    ret
