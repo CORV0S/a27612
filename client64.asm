@@ -75,9 +75,10 @@ _start:
     call     _got_here
     call _getmsgnum
     mov rcx, 0
-
+    mov rax, msgnum
     ;; Main loop handles connection requests (accept()) then echoes data back to client
     .mainloop:
+        push rcx
         
         call _get_msg
         ;; Read and echo string back to the client
@@ -87,8 +88,9 @@ _start:
             call     _echo
             call     _read
             call     _print
+        pop rcx
      inc rcx
-     mov rax, msgnum
+     
      cmp rcx, rax
      je .done
      jmp .mainloop
