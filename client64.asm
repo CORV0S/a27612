@@ -9,12 +9,12 @@
 global _start
 
 ;; Data definitions
-;struc sockaddr_in
-    ;.sin_family resw 1
-    ;.sin_port resw 1
-    ;.sin_addr resd 1
-    ;.sin_zero resb 8
-;endstruc
+struc sockaddr_in
+    .sin_family resw 1
+    .sin_port resw 1
+    .sin_addr resd 1
+    .sin_zero resb 8
+endstruc
 
 section .bss
     sock resw 2
@@ -23,10 +23,8 @@ section .bss
     read_count resw 2
     msg resb 256
     msgnum resb 5
-    ipstr resb 20
-    portstr resb 10
-    sockaddr_in resb 16
-    sport resb 2
+;    ipstr resb 20
+;    portstr resb 10
 
 section .data
     sock_err_msg        db "Failed to initialize socket", 0x0a, 0
@@ -50,23 +48,23 @@ section .data
     getmsg          db "Enter your message: ", 0x0a, 0
     getmsg_len      equ $ - getmsg
 
-    getip_msg          db "Enter server ip: ", 0x0a, 0
-    getip_msg_len      equ $ - getip_msg
+    ;getip_msg          db "Enter server ip: ", 0x0a, 0
+    ;getip_msg_len      equ $ - getip_msg
 
-    getport_msg          db "Enter server port: ", 0x0a, 0
-    getport_msg_len      equ $ - getport_msg
+    ;getport_msg          db "Enter server port: ", 0x0a, 0
+    ;getport_msg_len      equ $ - getport_msg
 
     getmsgnumstr          db "How many messages?: ", 0x0a, 0
     getmsgnumstr_len      equ $ - getmsgnumstr
 
     ;; sockaddr_in structure for the address the listening socket binds to
-    ;pop_sa istruc sockaddr_in
-        ;at sockaddr_in.sin_family, dw 2           ; AF_INET
-        ;at sockaddr_in.sin_port, dw 0xce56        ; port 22222 in host byte order
-        ;at sockaddr_in.sin_addr, dd 0             ; localhost - INADDR_ANY
-        ;at sockaddr_in.sin_zero, dd 0, 0
-    ;iend
-    ;sockaddr_in_len     equ $ - pop_sa
+    pop_sa istruc sockaddr_in
+        at sockaddr_in.sin_family, dw 2           ; AF_INET
+        at sockaddr_in.sin_port, dw 0xce56        ; port 22222 in host byte order
+        at sockaddr_in.sin_addr, dd 0             ; localhost - INADDR_ANY
+        at sockaddr_in.sin_zero, dd 0, 0
+    iend
+    sockaddr_in_len     equ $ - pop_sa
 
 section .text
 
@@ -76,49 +74,15 @@ _start:
     mov      word [sock], 0
     mov      word [client], 0
 
-    call _getip
-    call _getport
+    ;call _getip
+    ;call _getport
 
     ;; Initialize socket
     call     _socket
     call     _got_here
 
     ;; Bind and Listen
-    mov esi, [ipstr]
-    mov edi, sockaddr_in
-  .cc:
-    xor   ebx,ebx
-  .c:
-    lodsb
-    inc   edx
-    sub   al,'0'
-    jb   .next
-    imul ebx,byte 10
-    add   ebx,eax
-    jmp   short .c
-  .next:
-    mov   [edi+ecx+4],bl
-    inc   ecx
-    cmp   ecx,byte 4
-    jne   .cc
- 
-  mov word [edi], AF_INET 
-  mov esi, [portstr] 
-  xor eax,eax
-  xor ebx,ebx
-  .nextstr1:
-    lodsb
-    test al,al
-    jz .ret1
-    sub   al,'0'
-    imul ebx,10
-    add   ebx,eax
-    jmp   .nextstr1
-  .ret1:
-    xchg ebx,eax
-    mov [sport], eax
- 
-  mov si, [sport]
+
     call     _connect
     call     _got_here
     call _getmsgnum
