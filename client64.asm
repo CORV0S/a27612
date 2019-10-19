@@ -280,6 +280,7 @@ _get_msg:
     pop rsi                    ; store current rax
     pop rdi                    ; store current rax
     pop rax                    ; store current rax
+ret
 
 _getmsgnum:
     push rax                    ; store current rax
