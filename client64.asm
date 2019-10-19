@@ -257,11 +257,11 @@ _get_msg:
     mov       rdx, getmsg_len
     syscall
 
-    mov     rax, 1          ; SYS_write
-    mov     rdi, 0   ; stdin
-    mov     rsi, msg    ; variable
-    mov     rdx, 256        ; read 256 bytes 
-    syscall 
+    mov eax, 3 
+    mov ebx, 0     ; descriptor value for stdin
+    mov ecx, msg 
+    mov edx, 256     ;5 bytes (numeric, 1 for sign) of that information 
+    int 80h
 
     pop rdx                    ; store current rax
     pop rsi                    ; store current rax
