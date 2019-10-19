@@ -76,7 +76,8 @@ _start:
     call _getmsgnum
     mov eax, msgnum
     call atoi
-    push eax
+    mov rax, eax
+    push rax
     ;; Main loop handles connection requests (accept()) then echoes data back to client
     .mainloop:
 
@@ -90,12 +91,12 @@ _start:
             call     _read
             call     _print
 
-     pop eax
-     dec eax
+     pop rax
+     dec rax
      
-     cmp eax, 0
+     cmp rax, 0
      je .done
-     push eax
+     push rax
      jmp .mainloop
      .done:
             
