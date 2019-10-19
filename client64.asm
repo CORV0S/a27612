@@ -23,8 +23,8 @@ section .bss
     read_count resw 2
     msg resb 256
     msgnum resb 5
-;    ipstr resb 20
-;    portstr resb 10
+    ipstr resb 20
+    portstr resb 10
 
 section .data
     sock_err_msg        db "Failed to initialize socket", 0x0a, 0
@@ -48,11 +48,11 @@ section .data
     getmsg          db "Enter your message: ", 0x0a, 0
     getmsg_len      equ $ - getmsg
 
-    ;getip_msg          db "Enter server ip: ", 0x0a, 0
-    ;getip_msg_len      equ $ - getip_msg
+    getip_msg          db "Enter server ip: ", 0x0a, 0
+    getip_msg_len      equ $ - getip_msg
 
-    ;getport_msg          db "Enter server port: ", 0x0a, 0
-    ;getport_msg_len      equ $ - getport_msg
+    getport_msg          db "Enter server port: ", 0x0a, 0
+    getport_msg_len      equ $ - getport_msg
 
     getmsgnumstr          db "How many messages?: ", 0x0a, 0
     getmsgnumstr_len      equ $ - getmsgnumstr
