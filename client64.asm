@@ -21,6 +21,7 @@ section .bss
     client resw 2
     echobuf resb 256
     read_count resw 2
+    msg resb 256
 
 section .data
     sock_err_msg        db "Failed to initialize socket", 0x0a, 0
@@ -40,6 +41,9 @@ section .data
 
     got_here          db "Got here", 0x0a, 0
     got_here_len      equ $ - got_here
+
+    getmsg          db "Enter your message: ", 0x0a, 0
+    getmsg_len      equ $ - getmsg
 
     ;; sockaddr_in structure for the address the listening socket binds to
     pop_sa istruc sockaddr_in
@@ -68,19 +72,33 @@ _start:
 
     ;; Main loop handles connection requests (accept()) then echoes data back to client
     .mainloop:
-
+        call _get_msg
         ;; Read and echo string back to the client
         ;; up the connection on their end.
+<<<<<<< Updated upstream
         .readloop:
             call _got_here
         jmp .readloop
+=======
+        ;.readloop:
+            call     _echo
+            call     _read
+            call     _print
+            
+
+            ;; read_count is set to zero when client hangs up
+            ; mov     rax, [read_count]
+            ; cmp     rax, 0
+            ; je      .read_complete
+        ;jmp .readloop
+>>>>>>> Stashed changes
 
         .read_complete:
         ;; Close client socket
-        mov    rdi, [client]
+        mov    rdi, [sock]
         call   _close_sock
-        mov    word [client], 0
-    jmp    .mainloop
+        mov    word [sock], 0
+    ;jmp    .mainloop
 
     ;; Exit with success (return 0)
     mov     rdi, 0
@@ -120,7 +138,7 @@ _connect:
 _read:
     ;; Call sys_read
     mov     rax, 0          ; SYS_READ
-    mov     rdi, [client]   ; client socket fd
+    mov     rdi, [sock]   ; client socket fd
     mov     rsi, echobuf    ; buffer
     mov     rdx, 256        ; read 256 bytes 
     syscall 
@@ -144,9 +162,9 @@ _print:
 ;; using sys_write 
 _echo:
     mov     rax, 1               ; SYS_WRITE
-    mov     rdi, [client]        ; client socket fd
-    mov     rsi, echobuf         ; buffer
-    mov     rdx, [read_count]    ; number of bytes received in _read
+    mov     rdi, [sock]        ; client socket fd
+    mov     rsi, msg         ; buffer
+    mov     rdx, 256    ; number of bytes received in _read
     syscall
 
     ret
@@ -231,3 +249,30 @@ _exit:
     .perform_exit:
     mov        rax, 60
     syscall
+
+_get_msg:
+    push rax                    ; store current rax
+    push rdi                    ; store current rax
+    push rsi                    ; store current rax
+    push rdx                    ; store current rax
+    ;; Print connection message to stdout
+    mov       rax, 1             ; SYS_WRITE
+    mov       rdi, 1             ; STDOUT
+    mov       rsi, getmsg
+    mov       rdx, getmsg_len
+    syscall
+
+    mov     rax, 1          ; SYS_write
+    mov     rdi, 0   ; stdin
+    mov     rsi, msg    ; variable
+    mov     rdx, 256        ; read 256 bytes 
+    syscall 
+
+    pop rdx                    ; store current rax
+    pop rsi                    ; store current rax
+    pop rdi                    ; store current rax
+    pop rax                    ; store current rax
+    
+    
+
+ret
