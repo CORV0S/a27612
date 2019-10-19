@@ -113,18 +113,20 @@ _socket:
 
 
 _connect:
-    mov         rax, 42     ; SYS_SOCKET
+    mov         rax, 42          ; SYS_CONNECt
     mov         rdi, [sock]      ; AF_INET
     mov         rsi, pop_sa      ; SOCK_STREAM
     mov         rdx, sockaddr_in_len    
     syscall
-    
+    call     _got_here
     ;; Check if socket was created successfully
     cmp        rax, 0
     jle        _socket_fail
+    call     _got_here
 
     ;; Store the new socke_accept_failt descriptor 
-    ; mov        [sock], rax
+    mov        [sock], rax
+    call     _got_here
 
     ret
 
