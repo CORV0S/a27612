@@ -92,7 +92,7 @@ _start:
         pop rcx
      inc rcx
      
-     cmp rcx, rax
+     cmp rcx, eax
      je .done
      jmp .mainloop
      .done:
