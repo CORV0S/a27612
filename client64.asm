@@ -317,10 +317,10 @@ ret
 ; int atoi(Integer number)
 ; Ascii to integer function (atoi)
 atoi:
-    push    ebx             ; preserve ebx on the stack to be restored after function runs
-    push    ecx             ; preserve ecx on the stack to be restored after function runs
-    push    edx             ; preserve edx on the stack to be restored after function runs
-    push    esi             ; preserve esi on the stack to be restored after function runs
+    push    rbx             ; preserve ebx on the stack to be restored after function runs
+    push    rcx             ; preserve ecx on the stack to be restored after function runs
+    push    rdx             ; preserve edx on the stack to be restored after function runs
+    push    rsi             ; preserve esi on the stack to be restored after function runs
     mov     esi, eax        ; move pointer in eax into esi (our number to convert)
     mov     eax, 0          ; initialise eax with decimal value 0
     mov     ecx, 0          ; initialise ecx with decimal value 0
@@ -343,8 +343,8 @@ atoi:
 .finished:
     mov     ebx, 10         ; move decimal value 10 into ebx
     div     ebx             ; divide eax by value in ebx (in this case 10)
-    pop     esi             ; restore esi from the value we pushed onto the stack at the start
-    pop     edx             ; restore edx from the value we pushed onto the stack at the start
-    pop     ecx             ; restore ecx from the value we pushed onto the stack at the start
-    pop     ebx             ; restore ebx from the value we pushed onto the stack at the start
+    pop     rsi             ; restore esi from the value we pushed onto the stack at the start
+    pop     rdx             ; restore edx from the value we pushed onto the stack at the start
+    pop     rcx             ; restore ecx from the value we pushed onto the stack at the start
+    pop     rbx             ; restore ebx from the value we pushed onto the stack at the start
     ret
