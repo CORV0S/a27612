@@ -25,6 +25,8 @@ _start:
 
     mov eax, servip1
 
+    call f_sprint
+
 
     call f_quit
 
