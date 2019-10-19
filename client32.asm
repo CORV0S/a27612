@@ -6,8 +6,8 @@
 ;;      TEST FILES FOR RUNNING SIMPLE FUNCTIONS
 
 SECTION .bss
-   servip1 resb 10
-   servport resb 10
+   servip1 resb 256
+   servport resb 256
 
 SECTION .data
    ip_msg1      db "Please enter the server's ip in hex: ", 0x0a, 0
@@ -43,7 +43,7 @@ _get_server:
    mov eax, 3 
    mov ebx, 0     ; descriptor value for stdin
    mov ecx, servip1 
-   mov edx, 10     ;5 bytes (numeric, 1 for sign) of that information 
+   mov edx, 256     ;5 bytes (numeric, 1 for sign) of that information 
    int 80h
 
    ;Prompt User 
@@ -57,7 +57,7 @@ _get_server:
    mov eax, 3 
    mov ebx, 0     ; descriptor value for stdin
    mov ecx, servport
-   mov edx, 10     ;5 bytes (numeric, 1 for sign) of that information 
+   mov edx, 256     ;5 bytes (numeric, 1 for sign) of that information 
    int 80h
 
    ret
