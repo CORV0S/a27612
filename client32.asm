@@ -43,7 +43,7 @@ _get_server:
    mov eax, 3 
    mov ebx, 0     ; descriptor value for stdin
    mov ecx, servip1 
-   mov edx, 5     ;5 bytes (numeric, 1 for sign) of that information 
+   mov edx, 10     ;5 bytes (numeric, 1 for sign) of that information 
    int 80h
 
    ;Prompt User 
@@ -57,7 +57,7 @@ _get_server:
    mov eax, 3 
    mov ebx, 0     ; descriptor value for stdin
    mov ecx, servport
-   mov edx, 5     ;5 bytes (numeric, 1 for sign) of that information 
+   mov edx, 10     ;5 bytes (numeric, 1 for sign) of that information 
    int 80h
 
    ret
