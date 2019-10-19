@@ -9,6 +9,8 @@ SECTION .bss
    servip1 resb 256
    servport resb 256
    msgnum resb 5
+   buffer resb 1
+   msgstring resb 256
 
 SECTION .data
    ip_msg1      db "Please enter the server's ip in hex: ", 0x0a, 0
@@ -19,6 +21,9 @@ SECTION .data
 
    num_msg      db "how many messages would you like to send: ", 0x0a, 0
    num_msg_len  equ $ - num_msg
+
+   msg      db "Enter your message: ", 0x0a, 0
+   msg_len  equ $ - num_msg
 
 ;; Client main entry point
 global _start
@@ -82,7 +87,7 @@ _read:
     jz      _close              ; jmp to _close if we have reached the end of the file (zero flag set)
  
     mov     eax, buffer         ; move the memory address of our buffer variable into eax for printing
-    call    sprint              ; call our string printing function
+    call    f_sprint            ; call our string printing function
     jmp     _read               ; jmp to _read
 ret
  
@@ -139,3 +144,18 @@ _get_server:
 
    ret
 
+
+_get_msg:
+   ;Prompt User 
+   mov eax, 4 
+   mov ebx, 1     ; descriptor value for stdout
+   mov ecx, msg 
+   mov edx, msg_len 
+   int 80h 
+
+   ;Read and store the user input 
+   mov eax, 3 
+   mov ebx, 0     ; descriptor value for stdin
+   mov ecx, msgstring 
+   mov edx, 256     ;5 bytes (numeric, 1 for sign) of that information 
+   int 80h
