@@ -31,17 +31,20 @@ section .data
 
     lstn_err_msg        db "Socket Listen Failed", 0x0a, 0
     lstn_err_msg_len    equ $ - lstn_err_msg
-0x00000000
+
     accept_err_msg      db "Accept Failed", 0x0a, 0
     accept_err_msg_len  equ $ - accept_err_msg
 
     accept_msg          db "Client Connected!", 0x0a, 0
     accept_msg_len      equ $ - accept_msg
 
+    got_here          db "Got here", 0x0a, 0
+    got_here_len      equ $ - got_here
+
     ;; sockaddr_in structure for the address the listening socket binds to
     pop_sa istruc sockaddr_in
         at sockaddr_in.sin_family, dw 2           ; AF_INET
-        at sockaddr_in.sin_port, dw 0xce56        ; port 22222 in host byte order
+        at sockaddr_in.sin_port, dw 0xce57        ; port 22222 in host byte order
         at sockaddr_in.sin_addr, dd 0             ; localhost - INADDR_ANY
         at sockaddr_in.sin_zero, dd 0, 0
     iend
@@ -57,9 +60,11 @@ _start:
 
     ;; Initialize socket
     call     _socket
+    call     _got_here
 
     ;; Bind and Listen
-    ; call     _connect
+    call     _connect
+    call     _got_here
 
     ;; Main loop handles connection requests (accept()) then echoes data back to client
     .mainloop:
@@ -101,11 +106,27 @@ _socket:
     cmp        rax, 0
     jle        _socket_fail
 
-    ;; Store the new socket descriptor 
+    ;; Store the new socke_accept_failt descriptor 
     mov        [sock], rax
 
     ret
 
+
+_connect:
+    mov         rax, 42     ; SYS_SOCKET
+    mov         rdi, [sock]      ; AF_INET
+    mov         rsi, pop_sa      ; SOCK_STREAM
+    mov         rdx, sockaddr_in_len    
+    syscall
+    
+    ;; Check if socket was created successfully
+    cmp        rax, 0
+    jle        _socket_fail
+
+    ;; Store the new socke_accept_failt descriptor 
+    ; mov        [sock], rax
+
+    ret
 
 ;; Reads up to 256 bytes from the client into echobuf and sets the read_count variable
 ;; to be the number of bytes read by sys_read
@@ -173,6 +194,25 @@ _accept_fail:
     mov     rsi, accept_err_msg
     mov     rdx, accept_err_msg_len
     call    _fail
+
+
+_got_here:    
+    push rax                    ; store current rax
+    push rdi                    ; store current rax
+    push rsi                    ; store current rax
+    push rdx                    ; store current rax
+    ;; Print connection message to stdout
+    mov       rax, 1             ; SYS_WRITE
+    mov       rdi, 1             ; STDOUT
+    mov       rsi, got_here
+    mov       rdx, got_here_len
+    syscall
+
+    pop rdx                    ; store current rax
+    pop rsi                    ; store current rax
+    pop rdi                    ; store current rax
+    pop rax                    ; store current rax
+    ret
 
 ;; Calls the sys_write syscall, writing an error message to stderr, then exits
 ;; the application. rsi and rdx must be loaded with the error message and
