@@ -72,14 +72,7 @@ _start:
         ;; Read and echo string back to the client
         ;; up the connection on their end.
         .readloop:
-            ; call     _read
-            ; call     _print
-            ; call     _echo
-
-            ;; read_count is set to zero when client hangs up
-            ; mov     rax, [read_count]
-            ; cmp     rax, 0
-            ; je      .read_complete
+            call _got_here
         jmp .readloop
 
         .read_complete:
@@ -119,14 +112,6 @@ _connect:
     mov         rdx, sockaddr_in_len    
     syscall
     call     _got_here
-    ;; Check if socket was created successfully
-    ; cmp        rax, 0
-    ; jle        _socket_fail
-    ; call     _got_here
-
-    ;; Store the new socke_accept_failt descriptor 
-    ; mov        [sock], rax
-    ; call     _got_here
 
     ret
 
