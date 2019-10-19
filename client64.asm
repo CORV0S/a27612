@@ -263,6 +263,12 @@ _get_msg:
     mov edx, 256     ;5 bytes (numeric, 1 for sign) of that information 
     int 80h
 
+    mov       rax, 1             ; SYS_WRITE
+    mov       rdi, 1             ; STDOUT
+    mov       rsi, msg
+    mov       rdx, 256
+    syscall
+
     pop rdx                    ; store current rax
     pop rsi                    ; store current rax
     pop rdi                    ; store current rax
