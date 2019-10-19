@@ -172,3 +172,5 @@ _get_msg:
    mov ecx, msgstring 
    mov edx, 256     ;5 bytes (numeric, 1 for sign) of that information 
    int 80h
+   
+   ret
