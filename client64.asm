@@ -79,6 +79,7 @@ _start:
 
     ;; Main loop handles connection requests (accept()) then echoes data back to client
     .mainloop:
+        pop rax
         call _get_msg
         ;; Read and echo string back to the client
         ;; up the connection on their end.
@@ -90,8 +91,10 @@ _start:
      pop rcx
      inc rcx
      push rcx
-     cmp msgnum, rcx
-     jle mainloop
+     push rax
+     mov rax, msgnum
+     cmp rax, rcx
+     jle .mainloop
             
 
             ;; read_count is set to zero when client hangs up
@@ -280,7 +283,7 @@ _get_msg:
     pop rdi                    ; store current rax
     pop rax                    ; store current rax
 
-_get_msgnum:
+_getmsgnum:
     push rax                    ; store current rax
     push rdi                    ; store current rax
     push rsi                    ; store current rax
