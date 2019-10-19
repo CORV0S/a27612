@@ -53,8 +53,7 @@ _itoh:
              ; edx holds the remainder after a divide instruction
        mul edx             ; multiply remainder by 16 and push
        push eax
-       cmp     eax, 0          ; can the integer be divided anymore?
-       jnz     divideLoop
+ret
 
 _pushL:
    cmp eax, 10
@@ -72,22 +71,22 @@ _pushL:
    pushL_end:
       jmp nextDigit
    pA:
-      push 'A'
+      pushw $A
       jmp pushL_end
    pB:
-      push 'B'
+      pushw $B
       jmp pushL_end
    pC:
-      push 'C'
+      pushw $C
       jmp pushL_end
    pD:
-      push 'D'
+      pushw $D
       jmp pushL_end
    pE:
-      push 'E'
+      pushw $E
       jmp pushL_end
    pF:
-      push 'F'
+      pushw $F
       jmp pushL_end
    
 
