@@ -23,6 +23,8 @@ section .bss
     read_count resw 2
     msg resb 256
     msgnum resb 5
+    ipstr resb 20
+    portstr resb 10
 
 section .data
     sock_err_msg        db "Failed to initialize socket", 0x0a, 0
@@ -46,6 +48,12 @@ section .data
     getmsg          db "Enter your message: ", 0x0a, 0
     getmsg_len      equ $ - getmsg
 
+    getip_msg          db "Enter server ip: ", 0x0a, 0
+    getip_msg_len      equ $ - getip_msg
+
+    getport_msg          db "Enter server port: ", 0x0a, 0
+    getport_msg_len      equ $ - getport_msg
+
     getmsgnumstr          db "How many messages?: ", 0x0a, 0
     getmsgnumstr_len      equ $ - getmsgnumstr
 
@@ -65,6 +73,9 @@ _start:
     ;; Initialize listening and client socket values to 0, used for cleanup 
     mov      word [sock], 0
     mov      word [client], 0
+
+    call _getip
+    call _getport
 
     ;; Initialize socket
     call     _socket
@@ -310,8 +321,56 @@ _getmsgnum:
     pop rdi                    ; store current rax
     pop rax                    ; store current rax
     
-    
+ret
 
+_getip:
+    push rax                    ; store current rax
+    push rdi                    ; store current rax
+    push rsi                    ; store current rax
+    push rdx                    ; store current rax
+    ;; Print connection message to stdout
+    mov       rax, 1             ; SYS_WRITE
+    mov       rdi, 1             ; STDOUT
+    mov       rsi, getip_msg
+    mov       rdx, getip_msg_len
+    syscall
+
+    mov eax, 3 
+    mov ebx, 0     ; descriptor value for stdin
+    mov ecx, ipstr 
+    mov edx, 20     ;5 bytes (numeric, 1 for sign) of that information 
+    int 80h
+
+    pop rdx                    ; store current rax
+    pop rsi                    ; store current rax
+    pop rdi                    ; store current rax
+    pop rax                    ; store current rax
+    
+ret
+
+_getport:
+    push rax                    ; store current rax
+    push rdi                    ; store current rax
+    push rsi                    ; store current rax
+    push rdx                    ; store current rax
+    ;; Print connection message to stdout
+    mov       rax, 1             ; SYS_WRITE
+    mov       rdi, 1             ; STDOUT
+    mov       rsi, getport_msg
+    mov       rdx, getport_msg_len
+    syscall
+
+    mov eax, 3 
+    mov ebx, 0     ; descriptor value for stdin
+    mov ecx, portstr 
+    mov edx, 10     ;5 bytes (numeric, 1 for sign) of that information 
+    int 80h
+
+    pop rdx                    ; store current rax
+    pop rsi                    ; store current rax
+    pop rdi                    ; store current rax
+    pop rax                    ; store current rax
+    
 ret
 
 
