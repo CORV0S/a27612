@@ -48,7 +48,7 @@ section .data
     ;; sockaddr_in structure for the address the listening socket binds to
     pop_sa istruc sockaddr_in
         at sockaddr_in.sin_family, dw 2           ; AF_INET
-        at sockaddr_in.sin_port, dw 0xce57        ; port 22222 in host byte order
+        at sockaddr_in.sin_port, dw 0xce56        ; port 22222 in host byte order
         at sockaddr_in.sin_addr, dd 0             ; localhost - INADDR_ANY
         at sockaddr_in.sin_zero, dd 0, 0
     iend
@@ -262,12 +262,6 @@ _get_msg:
     mov ecx, msg 
     mov edx, 256     ;5 bytes (numeric, 1 for sign) of that information 
     int 80h
-
-    mov       rax, 1             ; SYS_WRITE
-    mov       rdi, 1             ; STDOUT
-    mov       rsi, msg
-    mov       rdx, 256
-    syscall
 
     pop rdx                    ; store current rax
     pop rsi                    ; store current rax
