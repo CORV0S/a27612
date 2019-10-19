@@ -75,11 +75,7 @@ _start:
         call _get_msg
         ;; Read and echo string back to the client
         ;; up the connection on their end.
-<<<<<<< Updated upstream
-        .readloop:
-            call _got_here
-        jmp .readloop
-=======
+
         ;.readloop:
             call     _echo
             call     _read
@@ -91,7 +87,6 @@ _start:
             ; cmp     rax, 0
             ; je      .read_complete
         ;jmp .readloop
->>>>>>> Stashed changes
 
         .read_complete:
         ;; Close client socket
