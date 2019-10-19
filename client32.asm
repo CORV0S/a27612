@@ -6,8 +6,8 @@
 ;;      TEST FILES FOR RUNNING SIMPLE FUNCTIONS
 
 SECTION .bss
-   servip1 resw 1
-   servport resw 1
+   servip1 resq 2
+   servport resq 2
 
 SECTION .data
    ip_msg1      db "Please enter the server's ip in hex: ", 0x0a, 0
