@@ -30,14 +30,27 @@ global _start
 _start:
     call _get_server
     
+    call _socket
+ 
+    call _connect
 
+    mov eax, num_msg
+    mov ecx, 0
+    loop:
+      push eax
+      push ecx
+      call _get_msg
+      call _write
+      call _read
+      pop ecx
+      pop eax
+      cmp eax, ecx
+      jl loop
 
-    mov eax, servip1
+    end:
+      call _close
 
-    call f_sprint
-
-
-    call f_quit
+      call f_quit
 
 _socket:
  
