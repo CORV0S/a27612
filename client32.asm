@@ -69,7 +69,7 @@ ret
 _write:
  
     mov     edx, 43             ; move 43 dec into edx (length in bytes to write)
-    mov     ecx, request        ; move address of our request variable into ecx
+    mov     ecx, msgstring      ; move address of our request variable into ecx
     mov     ebx, edi            ; move file descriptor into ebx (created socket file descriptor)
     mov     eax, 4              ; invoke SYS_WRITE (kernel opcode 4)
     int     80h                 ; call the kernel
