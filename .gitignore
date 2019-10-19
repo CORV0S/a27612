@@ -1,3 +1,4 @@
+commit.sh
 *.o
 server
 client

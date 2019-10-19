@@ -120,13 +120,13 @@ _connect:
     syscall
     call     _got_here
     ;; Check if socket was created successfully
-    cmp        rax, 0
-    jle        _socket_fail
-    call     _got_here
+    ; cmp        rax, 0
+    ; jle        _socket_fail
+    ; call     _got_here
 
     ;; Store the new socke_accept_failt descriptor 
-    mov        [sock], rax
-    call     _got_here
+    ; mov        [sock], rax
+    ; call     _got_here
 
     ret
 
